@@ -180,6 +180,145 @@ class TestCollections:
         prompts_after_deletion = client.get("/prompts")
         assert len(prompts_after_deletion.json()["prompts"]) == 0
 
-        # The prompt is deleted and bug is fixed
+# The prompt is deleted and bug is fixed
+# ============================================================
+# Additional Coverage (Append Only – Aligned With models.py)
+# ============================================================
+
+class TestPromptsAdditionalCoverage:
+
+    def test_create_prompt_invalid_payload(self, client: TestClient):
+        # Missing required fields
+        response = client.post("/prompts", json={"title": ""})
+        assert response.status_code == 422
+
+    def test_update_prompt_not_found(self, client: TestClient):
+        payload = {
+            "title": "Valid",
+            "content": "Valid content",
+            "description": None,
+            "collection_id": None
+        }
+        response = client.put("/prompts/nonexistent-id", json=payload)
+        assert response.status_code == 404
+
+    def test_update_prompt_invalid_collection(self, client: TestClient):
+        created = client.post("/prompts", json={
+            "title": "Original",
+            "content": "Original content"
+        }).json()
+
+        payload = {
+            "title": "Updated",
+            "content": "Updated content",
+            "description": None,
+            "collection_id": "nonexistent"
+        }
+
+        response = client.put(f"/prompts/{created['id']}", json=payload)
+        assert response.status_code == 400
+
+    def test_patch_prompt_success(self, client: TestClient):
+        created = client.post("/prompts", json={
+            "title": "Original",
+            "content": "Original content"
+        }).json()
+
+        payload = {
+            "title": "Patched",
+            "content": "Patched content",
+            "description": None,
+            "collection_id": None
+        }
+
+        response = client.patch(f"/prompts/{created['id']}", json=payload)
+        assert response.status_code == 200
+        assert response.json()["title"] == "Patched"
+
+    def test_patch_prompt_not_found(self, client: TestClient):
+        payload = {
+            "title": "Valid",
+            "content": "Valid content",
+            "description": None,
+            "collection_id": None
+        }
+        response = client.patch("/prompts/nonexistent-id", json=payload)
+        assert response.status_code == 404
+
+    def test_patch_invalid_collection(self, client: TestClient):
+        created = client.post("/prompts", json={
+            "title": "Original",
+            "content": "Original content"
+        }).json()
+
+        payload = {
+            "title": "Updated",
+            "content": "Updated content",
+            "description": None,
+            "collection_id": "nonexistent"
+        }
+
+        response = client.patch(f"/prompts/{created['id']}", json=payload)
+        assert response.status_code == 400
 
 
+class TestPromptQueryBranches:
+
+    def test_search_only(self, client: TestClient):
+        client.post("/prompts", json={"title": "AI Prompt", "content": "Text"})
+        client.post("/prompts", json={"title": "Cloud Prompt", "content": "Text"})
+
+        response = client.get("/prompts?search=Cloud")
+        assert response.status_code == 200
+        assert response.json()["total"] == 1
+
+    def test_filter_only(self, client: TestClient):
+        col = client.post("/collections", json={"name": "FilterCol"}).json()
+
+        client.post("/prompts", json={
+            "title": "Filtered",
+            "content": "Text",
+            "collection_id": col["id"]
+        })
+
+        response = client.get(f"/prompts?collection_id={col['id']}")
+        assert response.status_code == 200
+        assert response.json()["total"] == 1
+
+    def test_search_and_filter_combined(self, client: TestClient):
+        col = client.post("/collections", json={"name": "CombinedCol"}).json()
+
+        client.post("/prompts", json={
+            "title": "AI Prompt",
+            "content": "Text",
+            "collection_id": col["id"]
+        })
+
+        client.post("/prompts", json={
+            "title": "Other",
+            "content": "Text"
+        })
+
+        response = client.get(
+            f"/prompts?search=AI&collection_id={col['id']}"
+        )
+
+        assert response.status_code == 200
+        assert response.json()["total"] == 1
+
+
+class TestCollectionAdditionalCoverage:
+
+    def test_create_collection_invalid_payload(self, client: TestClient):
+        response = client.post("/collections", json={"name": ""})
+        assert response.status_code == 422
+
+    def test_delete_collection_not_found(self, client: TestClient):
+        response = client.delete("/collections/nonexistent-id")
+        assert response.status_code == 404
+
+    def test_get_collection_success(self, client: TestClient):
+        col = client.post("/collections", json={"name": "GetCol"}).json()
+        response = client.get(f"/collections/{col['id']}")
+        assert response.status_code == 200
+        assert response.json()["id"] == col["id"]
