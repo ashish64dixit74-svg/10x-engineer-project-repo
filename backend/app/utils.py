@@ -105,3 +105,10 @@ def extract_variables(content: str) -> List[str]:
     pattern = r'\{\{(\w+)\}\}'
     return re.findall(pattern, content)
 
+def filter_prompts_by_tags(prompts: List[Prompt], tags: List[str]) -> List[Prompt]:
+    normalized = [t.lower() for t in tags]
+
+    return [
+        p for p in prompts
+        if all(tag in [pt.lower() for pt in p.tags] for tag in normalized)
+    ]

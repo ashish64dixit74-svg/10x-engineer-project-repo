@@ -6,6 +6,7 @@ In a production environment, this would be replaced with a database.
 
 from typing import Dict, List, Optional
 from app.models import Prompt, Collection
+from app.models import get_current_time
 
 
 class Storage:
@@ -145,7 +146,32 @@ class Storage:
         self._prompts.clear()
         self._collections.clear()
 
+    def add_tags_to_prompt(self, prompt_id: str, tags: List[str]) -> Prompt:
+        prompt = self.get_prompt(prompt_id)
+        if not prompt:
+            raise ValueError("Prompt not found")
 
+        # Normalize to lowercase
+        new_tags = [t.lower() for t in tags]
+
+        # Merge unique tags
+        existing_tags = set(prompt.tags)
+        for tag in new_tags:
+            existing_tags.add(tag)
+
+        prompt.tags = list(existing_tags)
+        prompt.updated_at = get_current_time()
+
+        self._prompts[prompt_id] = prompt
+        return prompt
+
+
+    def get_prompts_by_tag(self, tag: str) -> List[Prompt]:
+        tag = tag.lower()
+        return [
+            p for p in self._prompts.values()
+            if tag in [t.lower() for t in p.tags]
+        ]
 # Global storage instance
 storage = Storage()
 
