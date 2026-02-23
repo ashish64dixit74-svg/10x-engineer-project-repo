@@ -10,6 +10,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: backend
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,9 +30,7 @@ jobs:
           pip install flake8
 
       - name: Run linting
-        run: |
-          flake8 app
+        run: flake8 app
 
       - name: Run tests with coverage
-        run: |
-          pytest --cov=app --cov-report=term --cov-fail-under=80
+        run: pytest --cov=app --cov-report=term --cov-fail-under=80
