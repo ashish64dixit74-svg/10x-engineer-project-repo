@@ -61,6 +61,19 @@ def health_check():
 # Implement GET /tags/{tag}/prompts
 @app.get("/tags/{tag}/prompts", response_model=List[Prompt])
 def get_prompts_by_tag(tag: str):
+    """
+    Fetches prompts associated with a specific tag.
+
+    Args:
+        tag (str): The tag to filter prompts by.
+
+    Returns:
+        List[Prompt]: A list of prompts with the specified tag.
+
+    Raises:
+        HTTPException: If no prompts are found for the given tag, a 404 error is raised.
+    """
+
     prompts = storage.get_prompts_by_tag(tag)
 
     if not prompts:
@@ -143,6 +156,21 @@ def get_prompt(prompt_id: str):
 # Implemented POST /prompts/{prompt_id}/tags
 @app.post("/prompts/{prompt_id}/tags", response_model=Prompt)
 def add_tags(prompt_id: str, payload: dict):
+    """
+    Adds tags to an existing prompt.
+
+    Args:
+        prompt_id (str): The unique identifier of the prompt.
+        payload (dict): A dictionary containing the tags to be added.
+
+    Returns:
+        Prompt: The updated prompt object with the newly added tags.
+
+    Raises:
+        HTTPException: If the tags format is invalid (not a list).
+        HTTPException: If the specified prompt is not found in storage.
+    """
+
     tags = payload.get("tags")
 
     if not isinstance(tags, list):
@@ -194,6 +222,20 @@ def create_prompt(prompt_data: PromptCreate):
 
 @app.put("/prompts/{prompt_id}", response_model=Prompt)
 def update_prompt(prompt_id: str, prompt_data: PromptUpdate):
+    """
+    Update an existing prompt with new data.
+
+    Args:
+        prompt_id (str): The identifier of the prompt to update.
+        prompt_data (PromptUpdate): The new data for the prompt.
+
+    Returns:
+        Prompt: The updated prompt object.
+
+    Raises:
+        HTTPException: If the prompt is not found with status code 404.
+        HTTPException: If the collection_id is provided and not found with status code 400.
+    """
     existing = storage.get_prompt(prompt_id)
     if not existing:
         raise HTTPException(status_code=404, detail="Prompt not found")
@@ -222,6 +264,20 @@ def update_prompt(prompt_id: str, prompt_data: PromptUpdate):
 # Implemented Prompt Endpoint for partial updates.
 @app.patch("/prompts/{prompt_id}", response_model=Prompt)
 def patch_prompt(prompt_id: str, prompt_data: PromptUpdate):
+    """
+    Partially updates an existing prompt with new data provided.
+
+    Args:
+        prompt_id (str): The unique identifier of the prompt to update.
+        prompt_data (PromptUpdate): An object containing the fields to update in the prompt.
+
+    Raises:
+        HTTPException: If the prompt does not exist (404) or if the specified collection is not found (400).
+
+    Returns:
+        Prompt: The updated prompt object.
+    """
+
     existing = storage.get_prompt(prompt_id)
     if not existing:
         raise HTTPException(status_code=404, detail="Prompt not found")
