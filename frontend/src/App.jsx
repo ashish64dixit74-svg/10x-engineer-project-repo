@@ -16,12 +16,20 @@ function App() {
     loading: collectionsLoading,
     error: collectionsError,
     addCollection,
+    removeCollection,
   } = useCollections();
 
   const handleCreateCollection = async (payload) => {
     const created = await addCollection(payload);
     setSelectedCollection(created.id);
     return created;
+  };
+
+  const handleDeleteCollection = async (collectionId) => {
+    await removeCollection(collectionId);
+    if (selectedCollection === collectionId) {
+      setSelectedCollection("");
+    }
   };
 
   return (
@@ -34,6 +42,7 @@ function App() {
             selectedCollection={selectedCollection}
             onSelectCollection={setSelectedCollection}
             onOpenCollectionModal={() => setShowCollectionModal(true)}
+            onDeleteCollection={handleDeleteCollection}
           />
         }
       >

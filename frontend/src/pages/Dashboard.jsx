@@ -7,6 +7,7 @@ import SearchBar from "../components/shared/SearchBar";
 import Button from "../components/shared/Button";
 import Modal from "../components/shared/Modal";
 import ErrorMessage from "../components/shared/ErrorMessage";
+import LoadingSpinner from "../components/shared/LoadingSpinner";
 import { usePrompts } from "../hooks/usePrompts";
 
 function Dashboard({
@@ -56,7 +57,19 @@ function Dashboard({
 
       {collectionsError ? <ErrorMessage message={collectionsError} /> : null}
       <p className="subtle-text">Showing {total} prompt(s)</p>
-      <PromptList prompts={prompts} loading={loading} error={error} onRetry={reload} />
+      {loading ? (
+        <LoadingSpinner label="Loading prompts..." />
+      ) : error ? (
+        <ErrorMessage message={error} onRetry={reload} />
+      ) : prompts.length === 0 ? (
+        <section className="prompt-empty-panel" aria-live="polite">
+          <h2>No prompts yet</h2>
+          <p>Create your first prompt to get started.</p>
+          <Button onClick={() => setShowCreatePrompt(true)}>Create Prompt</Button>
+        </section>
+      ) : (
+        <PromptList prompts={prompts} loading={false} error="" onRetry={reload} />
+      )}
 
       <Modal
         isOpen={showCreatePrompt}

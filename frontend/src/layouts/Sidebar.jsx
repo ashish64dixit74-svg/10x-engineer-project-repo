@@ -2,6 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import Button from "../components/shared/Button";
 import CollectionList from "../components/collections/CollectionList";
+import Modal from "../components/shared/Modal";
+import ErrorMessage from "../components/shared/ErrorMessage";
 
 function Sidebar({
   collections,
@@ -9,9 +11,30 @@ function Sidebar({
   selectedCollection,
   onSelectCollection,
   onOpenCollectionModal,
+  onDeleteCollection,
 }) {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [collectionToDelete, setCollectionToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
+
+  const handleConfirmDelete = async () => {
+    if (!collectionToDelete) {
+      return;
+    }
+
+    setIsDeleting(true);
+    setDeleteError("");
+    try {
+      await onDeleteCollection(collectionToDelete.id);
+      setCollectionToDelete(null);
+    } catch (error) {
+      setDeleteError(error.message || "Failed to delete collection.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <aside className={`app-sidebar ${isOpen ? "open" : ""}`}>
@@ -50,14 +73,47 @@ function Sidebar({
         {collectionsLoading ? (
           <p>Loading collections...</p>
         ) : (
-          <CollectionList
-            collections={collections}
-            selectedCollection={selectedCollection}
-            onSelectCollection={onSelectCollection}
-          />
+          <>
+            {deleteError ? <ErrorMessage message={deleteError} /> : null}
+            <CollectionList
+              collections={collections}
+              selectedCollection={selectedCollection}
+              onSelectCollection={onSelectCollection}
+              onRequestDeleteCollection={(collection) => {
+                setDeleteError("");
+                setCollectionToDelete(collection);
+              }}
+            />
+          </>
         )}
       </section>
       </div>
+
+      <Modal
+        isOpen={Boolean(collectionToDelete)}
+        title="Delete this collection?"
+        onClose={() => {
+          if (!isDeleting) {
+            setCollectionToDelete(null);
+          }
+        }}
+        footer={(
+          <>
+            <Button
+              variant="secondary"
+              onClick={() => setCollectionToDelete(null)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={handleConfirmDelete} disabled={isDeleting}>
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </>
+        )}
+      >
+        <p>This action cannot be undone.</p>
+      </Modal>
     </aside>
   );
 }
