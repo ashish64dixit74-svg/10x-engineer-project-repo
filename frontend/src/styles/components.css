@@ -25,18 +25,24 @@ select {
   width: 100%;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  background: #fff;
-  color: #0f172a;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.search-input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-secondary);
 }
 
 .search-input:focus,
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
   outline: none;
 }
 
@@ -48,12 +54,12 @@ select:focus {
 .form-grid label {
   display: grid;
   gap: 8px;
-  color: #334155;
+  color: var(--text-secondary);
   font-size: 0.92rem;
 }
 
 .form-error {
-  color: #b91c1c;
+  color: var(--color-danger);
   margin: 0;
   font-size: 0.9rem;
 }
@@ -65,8 +71,8 @@ select:focus {
 }
 
 .prompt-card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 14px;
   padding: 18px;
   min-height: 200px;
@@ -74,14 +80,14 @@ select:focus {
   flex-direction: column;
   gap: 12px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  box-shadow: var(--shadow-card);
 }
 
 .prompt-card:hover {
   transform: translateY(-2px);
-  border-color: #cbd5e1;
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .prompt-card:active {
@@ -93,12 +99,12 @@ select:focus {
   font-size: 1.03rem;
   line-height: 1.35;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--text-primary);
 }
 
 .prompt-card-description {
   margin: 0;
-  color: #475569;
+  color: var(--text-secondary);
   font-size: 0.93rem;
   line-height: 1.45;
   display: -webkit-box;
@@ -110,15 +116,16 @@ select:focus {
 .prompt-card-meta {
   margin-top: auto;
   font-size: 0.78rem;
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .prompt-detail {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--shadow-md);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .prompt-detail h1 {
@@ -134,11 +141,12 @@ select:focus {
 
 .prompt-content {
   white-space: pre-wrap;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 12px;
-  color: #0f172a;
+  color: var(--text-primary);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .btn {
@@ -149,7 +157,7 @@ select:focus {
   font-weight: 600;
   line-height: 1;
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 }
 
 .btn:active {
@@ -162,34 +170,34 @@ select:focus {
 }
 
 .btn-primary {
-  background: #2563eb;
+  background: var(--primary-color);
   color: #fff;
   box-shadow: 0 6px 14px rgba(37, 99, 235, 0.28);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: var(--primary-hover);
 }
 
 .btn-secondary {
-  background: #f8fafc;
-  color: #0f172a;
-  border-color: #dbe3ee;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
+  background: var(--bg-sidebar);
+  border-color: var(--primary-color);
 }
 
 .btn-danger {
-  background: #dc2626;
+  background: var(--color-danger);
   color: white;
   box-shadow: 0 6px 14px rgba(220, 38, 38, 0.22);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: #b91c1c;
+  background: var(--color-danger-hover);
 }
 
 .collection-list {
@@ -207,19 +215,20 @@ select:focus {
   background: transparent;
   border-radius: 10px;
   padding: 9px 11px;
-  color: #0f172a;
+  color: var(--text-primary);
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .collection-item:hover {
-  background: rgba(148, 163, 184, 0.14);
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
 }
 
 .collection-item.active {
-  border-color: #bfdbfe;
-  background: #dbeafe;
-  color: #1e3a8a;
+  border-color: var(--primary-color);
+  background: var(--bg-secondary);
+  color: var(--primary-color);
   font-weight: 600;
 }
 
@@ -232,11 +241,12 @@ select:focus {
 .tag-chip {
   display: inline-block;
   padding: 4px 10px;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: var(--tag-bg);
+  border: 1px solid var(--border-color);
   border-radius: 999px;
   font-size: 0.75rem;
-  color: #334155;
+  color: var(--tag-text);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .action-row {
@@ -250,8 +260,8 @@ select:focus {
   width: 24px;
   height: 24px;
   margin: 0 auto 8px;
-  border: 3px solid #dbeafe;
-  border-top-color: #2563eb;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary-color);
   border-radius: 999px;
   animation: spin 0.8s linear infinite;
 }
@@ -263,33 +273,36 @@ select:focus {
 }
 
 .error-message {
-  background: #fff1f2;
-  border: 1px solid #fecdd3;
-  color: #9f1239;
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  color: var(--error-text);
   border-radius: 12px;
   padding: 12px;
   margin-bottom: 16px;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.45);
+  background: var(--overlay-bg);
   display: grid;
   place-items: center;
   z-index: 20;
   padding: 16px;
+  transition: background 0.2s ease;
 }
 
 .modal {
   width: min(720px, 100%);
   max-height: 90vh;
   overflow: auto;
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 20px 34px rgba(15, 23, 42, 0.2);
+  box-shadow: var(--shadow-md);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .modal-header {
