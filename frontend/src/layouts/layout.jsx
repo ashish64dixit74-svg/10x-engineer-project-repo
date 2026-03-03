@@ -6,7 +6,9 @@ function Layout({ sidebar, children }) {
       <Header />
       <div className="app-body">
         {sidebar}
-        <main className="app-main">{children}</main>
+        <main className="app-main">
+          <div className="app-main-inner">{children}</div>
+        </main>
       </div>
     </div>
   );

@@ -23,8 +23,8 @@ function PromptCard({ prompt }) {
         }
       }}
     >
-      <h3>{prompt.title}</h3>
-      <p>{prompt.description || prompt.content.slice(0, 120)}</p>
+      <h3 className="prompt-card-title">{prompt.title}</h3>
+      <p className="prompt-card-description">{prompt.description || prompt.content.slice(0, 120)}</p>
       <div className="tag-list">
         {(prompt.tags || []).map((tag) => (
           <span key={tag} className="tag-chip">
@@ -32,7 +32,7 @@ function PromptCard({ prompt }) {
           </span>
         ))}
       </div>
-      <small>Updated: {formatDate(prompt.updated_at)}</small>
+      <small className="prompt-card-meta">Updated: {formatDate(prompt.updated_at)}</small>
     </article>
   );
 }

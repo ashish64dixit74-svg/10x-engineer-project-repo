@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 import Button from "../components/shared/Button";
 import CollectionList from "../components/collections/CollectionList";
 
@@ -10,9 +11,20 @@ function Sidebar({
   onOpenCollectionModal,
 }) {
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <aside className="app-sidebar">
+    <aside className={`app-sidebar ${isOpen ? "open" : ""}`}>
+      <button
+        type="button"
+        className="sidebar-mobile-toggle"
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-expanded={isOpen}
+        aria-controls="sidebar-content"
+      >
+        {isOpen ? "Close Menu" : "Open Menu"}
+      </button>
+      <div id="sidebar-content" className="sidebar-content">
       <div className="sidebar-top">
         <Link to="/" className="sidebar-link">
           Dashboard
@@ -45,6 +57,7 @@ function Sidebar({
           />
         )}
       </section>
+      </div>
     </aside>
   );
 }
