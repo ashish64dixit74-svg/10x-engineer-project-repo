@@ -6,6 +6,7 @@
   --space-2: 16px;
   --space-3: 24px;
   --space-4: 32px;
+  --space-5: 40px;
   --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
   --color-danger: #dc2626;
   --color-danger-hover: #b91c1c;
@@ -29,10 +30,11 @@
   --card-bg: #ffffff;
   --primary-color: #2563eb;
   --primary-hover: #1d4ed8;
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 6px 18px rgba(15, 23, 42, 0.08);
-  --shadow-card: 0 2px 8px rgba(15, 23, 42, 0.06);
-  --shadow-card-hover: 0 12px 24px rgba(15, 23, 42, 0.12);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 28px rgba(15, 23, 42, 0.08);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 22px rgba(15, 23, 42, 0.05);
+  --shadow-card-hover: 0 1px 2px rgba(0, 0, 0, 0.05), 0 16px 32px rgba(15, 23, 42, 0.09);
+  --card-hover-glow: 0 0 0 1px rgba(37, 99, 235, 0.12), 0 0 0 10px rgba(37, 99, 235, 0.06);
   --overlay-bg: rgba(15, 23, 42, 0.45);
   --error-bg: #fff1f2;
   --error-border: #fecdd3;
@@ -43,19 +45,20 @@
 }
 
 :root[data-theme="dark"] {
-  --bg-primary: #020617;
+  --bg-primary: #060d1a;
   --bg-secondary: #0f172a;
-  --bg-sidebar: #111827;
+  --bg-sidebar: #111c2f;
   --text-primary: #e2e8f0;
   --text-secondary: #94a3b8;
-  --border-color: #1e293b;
-  --card-bg: #0b1220;
+  --border-color: #263347;
+  --card-bg: #121d31;
   --primary-color: #3b82f6;
   --primary-hover: #2563eb;
-  --shadow-sm: 0 1px 2px rgba(2, 6, 23, 0.55);
-  --shadow-md: 0 8px 20px rgba(2, 6, 23, 0.5);
-  --shadow-card: 0 2px 10px rgba(2, 6, 23, 0.35);
-  --shadow-card-hover: 0 10px 24px rgba(2, 6, 23, 0.5);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px rgba(0, 0, 0, 0.32);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.38), 0 8px 20px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 1px 2px rgba(0, 0, 0, 0.45), 0 14px 30px rgba(0, 0, 0, 0.35);
+  --card-hover-glow: 0 0 0 1px rgba(59, 130, 246, 0.26), 0 0 0 8px rgba(59, 130, 246, 0.08);
   --overlay-bg: rgba(2, 6, 23, 0.7);
   --error-bg: #3f0f1f;
   --error-border: #6b233f;
@@ -100,10 +103,14 @@ a {
 }
 
 .app-header {
-  background: var(--bg-secondary);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-secondary) 92%, white 8%) 0%,
+    var(--bg-secondary) 100%
+  );
   border-bottom: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-4);
   transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
@@ -116,21 +123,22 @@ a {
 }
 
 .brand-mark {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
   font-weight: 700;
   font-size: 0.85rem;
   color: #fff;
-  background: linear-gradient(145deg, var(--primary-color), #3b82f6);
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28);
+  background: linear-gradient(150deg, #60a5fa 0%, var(--primary-color) 62%, #1d4ed8 100%);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
 }
 
 .brand-copy h1 {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.35rem;
+  font-weight: 700;
   letter-spacing: -0.01em;
 }
 
@@ -148,17 +156,18 @@ a {
   width: 40px;
   height: 40px;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--bg-primary);
   color: var(--text-primary);
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .theme-toggle:hover {
   background: var(--bg-sidebar);
+  border-color: var(--primary-color);
 }
 
 .theme-toggle:active {
@@ -168,6 +177,11 @@ a {
 .theme-toggle svg {
   width: 18px;
   height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(12deg);
 }
 
 .app-body {
@@ -176,7 +190,7 @@ a {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
-  gap: var(--space-3);
+  gap: var(--space-4);
   padding: var(--space-3);
   align-items: start;
   flex: 1;
@@ -189,7 +203,8 @@ a {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: var(--space-2);
-  transition: background 0.2s ease, border-color 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .sidebar-mobile-toggle {
@@ -210,7 +225,7 @@ a {
 .sidebar-top {
   display: grid;
   gap: var(--space-1);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
 .sidebar-link {
@@ -228,10 +243,16 @@ a {
 
 .sidebar-section h2 {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.78rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   color: var(--text-secondary);
+}
+
+.sidebar-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--space-2);
 }
 
 .sidebar-title-row {
@@ -249,6 +270,12 @@ a {
 .app-main-inner {
   width: 100%;
   max-width: 1200px;
+  background: color-mix(in srgb, var(--bg-secondary) 88%, transparent);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-3);
+  min-height: 100%;
 }
 
 .subtle-text {
@@ -303,5 +330,9 @@ a {
 
   .app-sidebar.open .sidebar-content {
     display: block;
+  }
+
+  .app-main-inner {
+    padding: var(--space-2);
   }
 }
